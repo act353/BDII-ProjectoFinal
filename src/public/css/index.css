@@ -1,0 +1,396 @@
+/***********************
+*****Estilo General*****
+***********************/
+* {
+    box-sizing: border-box;
+    outline: none;
+    /* Check this site for more details: http://help.dottoro.com/lhwdpnva.php */
+    -moz-user-select: none; /* These user-select properties are inheritable, used to prevent text selection */
+    -webkit-user-select: none;
+    -ms-user-select: none; /* From IE10 only */
+    user-select: none; /* Not valid CSS yet, as of July 2012 */
+
+    -webkit-user-drag: none; /* Prevents dragging of images/divs etc */
+    user-drag: none;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: #3F3F3F;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #585858;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #606060;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(21,21,21);
+  color: #ffffff;
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+  overflow: hidden;
+  -webkit-user-select: none;
+
+  transition: 0.5s;
+}
+a {
+  text-decoration: none;
+}
+tbody {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.titlebar {
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  background-color: rgb(16,16,16);
+  height: 30px;
+  width: 100%;
+}
+.titlebar button {
+  -webkit-app-region: no-drag;
+  float: right;
+  width: 45px;
+  height: 30px;
+  background-color: rgb(16,16,16);
+  color: white;
+  border: 2px solid rgb(16,16,16);
+}
+.titlebar #salir:hover {
+  background-color: rgb(232, 17, 35);
+  border-color: rgb(232, 17, 35);
+}
+.titlebar #M:hover {
+  background-color: rgb(36,36,36);
+  border-color: rgb(36,36,36);
+}
+.vista {
+  margin:0;
+  border: 1.5px solid;
+  border-color: rgb(30,30,30);
+}
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+}
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.bg {
+  position: absolute;
+  z-index: -1;
+  bottom: -20px;
+  left: 0;
+}
+.Cont {
+  width: 100%;
+  height: 100%;
+}
+.DisplayB {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: rgba(0,0,0,0.3);
+  display: none;
+  top: 34px;
+  left: 0;
+}
+#btnMenu {
+  padding: 0;
+  padding-top: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+#btnMenu:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+.navmen {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Stay on top */
+  top: 33px; /* Stay at the top */
+  left: 0;
+  background-color: rgb(35,35,35); /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+.navmen .closebtn {
+    position: absolute;
+    border: none;
+    background-color: rgb(35,35,35);
+    color: white;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+}
+.navmen .linkmen {
+  display: flex;
+  background-color: rgb(35,35,35);
+  color: white;
+  width: 100%;
+  height: 40px;
+}
+.navmen .linkmen button {
+  position: absolute;
+  text-align: left;
+  background: none;
+  color: white;
+  width: 216px;
+  height: 40px;
+  border: none;
+}
+.navmen .linkmen img {
+  margin-top: 5px;
+}
+.navmen .linkmen:hover {
+  background-color: white;
+  background-image: linear-gradient(to right, rgba(17,17,17,0.6), rgba(17,17,17,1));
+}
+.input {
+  background-color: rgb(35, 35, 35);
+  border: 1px solid rgb(98, 98, 98);
+  color: #ffffff;
+  font-size: 20px;
+}
+.btnNormal {
+  border: 2px solid rgb(81, 81, 81);
+  background-color: rgb(53, 53, 53);
+  color: white;
+  cursor: pointer;
+  padding:3px 10px;
+  transition: 0.5s;
+}
+.btnNormal:hover {
+  background-color: rgb(81, 81, 81);
+  border-color: rgb(53, 53, 53);
+}
+.checkbox {
+  width: 24px;
+  height: 24px;
+  padding: 1px 2px 2px 1px;
+  border: 1px solid rgb(98, 98, 98);
+  background-color: rgba(0,0,0,0.8);
+}
+.checkbox:hover {
+  background-color: rgba(30,30,30,0.8);
+}
+.select {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  background-color: rgb(35, 35, 35);
+  color: #ffffff;
+  font-size: 20px;
+}
+.selectbtn-content {
+  cursor: pointer;
+  border: 1px solid rgb(98, 98, 98);
+}
+.selectbtn-content img {
+  float: right;
+}
+.selectbtn {
+    background-color: rgb(35, 35, 35);
+    height: 30px;
+    color: white;
+    padding: 5px 0;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+.select-content {
+    display: none;
+    position: absolute;
+    background-color:rgb(35, 35, 35);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-style: solid;
+    border-width: 0 1px 1px 1px;
+    border-color: rgb(98, 98, 98);
+}
+.select-content button {
+  background-color: rgb(35, 35, 35);
+  width:100%;
+  height: 30px;
+  color: white;
+  padding: 5px 0;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+}
+.select-content button:not(:first-child){
+  border-top: 1px solid rgb(98, 98, 98);
+}
+.select-content button:hover {
+  background-color: rgb(25, 25, 25);
+}
+.Error {
+  visibility: hidden;
+}
+/***********************
+*Termina estilo General*
+***********************/
+
+
+/************************
+******Estilo Sesion******
+************************/
+.Sesion {
+  margin: auto;
+  position: absolute;
+  width: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.Sesion #IconS {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3vh;
+}
+.Sesion .text {
+  height: 35px;
+  width: 300px;
+  background-color: rgb(73, 73, 73);
+  color: rgb(187, 187, 187);
+  border: none;
+  padding-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1vh;
+}
+#btnSesion {
+  height: 35px;
+  width: 300px;
+  color: #ffffff;
+  background-color: rgb(125,12,18);
+  border: 1px solid rgb(125,12,18);
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+.Sesion .err {
+  color: red;
+  display: block;
+  visibility: visible;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 0;
+}
+.Sesion .hiden {
+  color: red;
+  display: block;
+  visibility: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 0;
+}
+/************************
+**Termina estilo Sesion**
+************************/
+
+
+/***********************
+*****Estilo Entries*****
+***********************/
+.entries,.scroll{
+  border-collapse: collapse;
+  width: 100%;
+}
+.entries td,.entries th{
+  width: 16.66%;
+  padding: 8px 0 8px 8px;
+  text-align: left;
+}
+.entries tbody tr:hover{
+  background-color: rgba(41,41,41,0.9);
+}
+#Movment .Product {
+  width: 350px;
+  height: 500px;
+  border: 2px solid rgb(98, 98, 98);
+  background-color: rgba(10,10,10,0.8);
+  display: flex;
+  margin: auto;
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/*************************
+**Termina estilo Entries**
+*************************/
+
+
+/************************
+*****Estilo Products*****
+************************/
+#Products .Product {
+  width: 350px;
+  height: 500px;
+  border: 2px solid rgb(98, 98, 98);
+  background-color: rgba(10,10,10,0.8);
+  display: flex;
+  margin: auto;
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.Descontinuado {
+  background-color: rgba(80,11,11,0.8);
+}
+.ProductL,.scroll{
+  border-collapse: collapse;
+  width: 100%;
+}
+.ProductL td,.ProductL th{
+  width: 16.66%;
+  padding: 8px 0 8px 8px;
+  text-align: left;
+}
+.ProductL tbody tr:hover{
+  background-color: rgba(41,41,41,0.9);
+}
+/**************************
+**Termina estilo Products**
+**************************/
