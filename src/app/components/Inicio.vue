@@ -148,7 +148,7 @@
         }
       },
       getEntries() {
-        fetch(`/api/entries`)
+        fetch(`/api/inventory/entries`)
         .then(res => res.json())
         .then(data => {
           this.Entries = data;

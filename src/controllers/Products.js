@@ -41,7 +41,7 @@ module.exports = {
   updateProduct: async (req,res) => {
     const {NOMBRE,PRECIO,STOCK,UNIDAD,MOSTRAR} = req.body;
     const {id} = req.params;
-    const query = `CALL update_Product(?,?,?,?)`;
+    const query = `CALL update_Product(?,?,?,?,?)`;
     await con.query(query, [id,NOMBRE,PRECIO,STOCK,UNIDAD,MOSTRAR], (err, fields) => {
       if (!err) {
         res.json({isError:false});
