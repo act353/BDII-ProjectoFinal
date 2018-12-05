@@ -32,7 +32,7 @@
         <div class="row">
           <div class="col-12">
             <div class="select">
-              <div class="selectbtn-content" v-on:click="drop('uni')">
+              <div class="selectbtn-content" v-on:click="drop('uni')" v-on:focusout="drop('uni')">
                 <button class="selectbtn">{{product.UNIDAD}}</button>
                 <img src="/img/DropDown30px.png">
               </div>
@@ -53,7 +53,7 @@
         <div class="row">
           <div class="col-12">
             <div class="select">
-              <div class="selectbtn-content" v-on:click="drop('mos')">
+              <div class="selectbtn-content" v-on:click="drop('mos')" v-on:focusout="drop('mos')">
                 <button class="selectbtn">{{product.MOSTRAR}}</button>
                 <img src="/img/DropDown30px.png">
               </div>

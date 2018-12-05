@@ -83,18 +83,20 @@
     <div class="DisplayB" id="AddEntry" v-on:click="closeNav">
       <div id="Product" class="Product" style="display:block;">
         <div class="row">
-          <div class="col-12">
-            <input type="text" style="width:100%;height:30px;" class="input" placeholder="Codigo">
+          <div class="col-12" style="display:flex;">
+            <input type="text" style="width:30%;height:30px;" class="input" placeholder="Codigo" readonly>
+            <input type="text" style="margin-left:1vw;width:40%;height:30px;" class="input" placeholder="Producto" readonly>
+            <button style="margin:auto 0 auto 1vw;" class="btnNormal">Buscar</button>
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <input type="text" style="width:100%;height:30px;" class="input" placeholder="Producto">
+            <input type="number" style="width:100%;height:30px;" class="input" placeholder="Precio" v-model="Entrada.PRECIO">
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <input type="text" style="width:100%;height:30px;" class="input" placeholder="Precio">
+            <input type="number" style="width:100%;height:30px;" class="input" placeholder="Cantidad" v-model="Entrada.CANTIDAD">
           </div>
         </div>
         <div class="row">
@@ -108,11 +110,21 @@
 </template>
 
 <script>
+  class Entrada {
+    constructor(code, name, price, quantity) {
+      this.CODIGO = code;
+      this.NOMBRE = name;
+      this.PRECIO = price;
+      this.CANTIDAD = quantity;
+    }
+  }
+
   export default {
     data(){
       return {
         products: [],
         Entries: [],
+        Entrada: new Entrada(),
         date: '',
         nav:false
       }
@@ -147,6 +159,18 @@
           document.getElementById('AddEntry').style.display="flex";
         }else{
           document.getElementById('AddEntry').style.display="none";
+          this.reset();
+        }
+      },
+      reset(){
+        this.Entrada = new Entrada();
+      },
+      showDiv(id){
+        divS = document.getElementById(id);
+        if (divS.style.display=="block") {
+          divS.style.display="none";
+        } else {
+          divS.style.display="block";
         }
       }
     }
