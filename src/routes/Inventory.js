@@ -2,10 +2,19 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getEntries
+  getProdToEntries,
+  insertEntry,
+  getEntries,
+  insertMov
 } = require('../controllers/Inventory.js');
 
 router.route('/entries')
-  .get()
+  .get(getProdToEntries)
+  .post(insertEntry)
+;
+
+router.route('/:Mov')
+  .get(getEntries)
+  .post(insertMov)
 ;
 module.exports = router;

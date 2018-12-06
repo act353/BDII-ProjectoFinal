@@ -3,14 +3,14 @@
     <div id="navmen" class="navmen">
       <button  class="closebtn" v-on:click="closeNav">&times;</button>
       <div class="linkmen">
-        <router-link to="/Productos"><span><img src="/img/icono-inicio.png" alt="Inicio"></span><span><button>Productos</button></span></router-link>
+        <router-link to="/Productos"><span><img src="/img/icono-productos.png" alt="Inicio"></span><span><button>Productos</button></span></router-link>
       </div>
       <div class="linkmen">
         <router-link to="/Entries"><span><img src="/img/icono-inventario.png" alt="Inicio"></span><span><button>Inventario</button></span></router-link>
       </div>
-      <div class="linkmen">
+      <!--div class="linkmen">
         <router-link to="/Sesion"><span><img src="/img/icono-mantenimiento.png" alt="Inicio"></span><span><button> Mantenimiento</button></span></router-link>
-      </div>
+      </div-->
       <div class="linkmen">
         <router-link to="/Sesion"><span><img src="/img/icono-inicio.png" alt="Inicio"></span><span><button>Cerrar sesión</button></span></router-link>
       </div>
@@ -20,12 +20,15 @@
           <button v-on:click="openNav" id="btnMenu"><img src="/img/icono-menu.png"></button>
         </span>
         <span style="display: inline;margin-left: 40px;">
-          <label>No.Factura</label>
-          <input style="width: 70px;height: 25px;" class="input" type="numbre">
+          <label>No.Mov.</label>
+          <input id="MovCode" style="width: 70px;height: 25px;" class="input" type="text" v-model="code" v-on:keyup.enter="setMov()" maxlength="10">
           <span>{{date.getDate()}}/{{date.getMonth()+1}}/{{date.getFullYear()}}</span>
         </span>
         <span style="margin-left:7vw;">
           <button style="padding:3px 10px;" class="btnNormal" v-on:click="showAdd(true)">Agregar</button>
+        </span>
+        <span id="ErrMov" class="error" style="margin-left:7vw;">
+          {{this.Error}}
         </span>
     </div>
     <div class="row">
@@ -42,8 +45,8 @@
                     <th>Producto</th>
                     <th>Unidad</th>
                     <th>Cantidad</th>
-                    <th>En Stock</th>
                     <th>Precio</th>
+                    <th></th>
                   </tr>
                 </thead>
               </table>
@@ -54,21 +57,15 @@
               <div style="height:65vh;width:100%;overflow-y:auto;overflow-x:hidden;">
                 <table class="entries">
                   <tbody>
-                    <tr v-on:dblclick="prueba(1)">
-                      <td>3</td>
-                      <td>3</td>
-                      <td>3</td>
-                      <td>3</td>
-                      <td>3</td>
-                      <td>3</td>
-                    </tr>
                     <tr v-for="product of Entries">
-                      <td>{{product.codigo}}</td>
-                      <td>{{product.nombre}}</td>
-                      <td>{{product.medida}}</td>
-                      <td>{{product.cantidad}}</td>
-                      <td>{{product.cantidadA}}</td>
-                      <td>{{product.precio}}</td>
+                      <td>{{product.PRODUCTO}}</td>
+                      <td>{{product.NOMBRE}}</td>
+                      <td>{{product.UNIDAD}}</td>
+                      <td>{{product.CANTIDAD}}</td>
+                      <td>{{product.PRECIO}}</td>
+                      <td>
+                        <button type="button" class="btnNormal" v-on:click="deleteEntry(product.PRODUCTO)">Quitar</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -80,13 +77,63 @@
       <div class="col-1">
       </div>
     </div>
+    <div id="searchP" class="DisplayC" style="z-index:3;">
+      <div class="Product" style="display:block;width:450px;">
+        <div class="row">
+          <div class="col-12">
+            <input type="text" class="input" v-model="search" v-on:keyup="findProducts" placeholder="Ingresar nombre del producto a buscar">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <table class="scroll" style="margin: 0;">
+              <tr>
+                <td style="padding:0;">
+                  <table class="ProductL">
+                    <thead>
+                      <tr>
+                        <th>Codigo</th>
+                        <th>Producto</th>
+                        <th>En Stock</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0;">
+                  <div style="height:65vh;width:100%;overflow-y:auto;overflow-x:hidden;">
+                    <table class="ProductL">
+                      <tbody>
+                        <tr v-for="product of products">
+                            <td>{{product.ID_PROD}}</td>
+                            <td>{{product.NOMBRE}}</td>
+                            <td>{{product.STOCK}}</td>
+                            <td><button class="btnNormal" v-on:click="getProduct(product.ID_PROD)">Seleccionar</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="DisplayB" id="AddEntry" v-on:click="closeNav">
       <div id="Product" class="Product" style="display:block;">
         <div class="row">
           <div class="col-12" style="display:flex;">
-            <input type="text" style="width:30%;height:30px;" class="input" placeholder="Codigo" readonly>
-            <input type="text" style="margin-left:1vw;width:40%;height:30px;" class="input" placeholder="Producto" readonly>
-            <button style="margin:auto 0 auto 1vw;" class="btnNormal">Buscar</button>
+            <input type="text" style="width:30%;height:30px;" class="input" placeholder="Codigo" readonly v-model="Entrada.PRODUCTO">
+            <input type="text" style="margin-left:1vw;width:40%;height:30px;" class="input" placeholder="Producto" readonly v-model="Entrada.NOMBRE">
+            <button style="margin:auto 0 auto 1vw;" class="btnNormal" v-on:click="showDiv('searchP')">Buscar</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <input type="number" class="input" v-model="stockEntry" readonly>
           </div>
         </div>
         <div class="row">
@@ -100,9 +147,15 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-6">
             <button class="btnNormal" v-on:click="showAdd(false)">Cancelar</button>
           </div>
+          <div class="col-6">
+            <button class="btnNormal" v-on:click="addEntry">Agregar</button>
+          </div>
+        </div>
+        <div id="ErrAdd" class="row error">
+          {{this.Error}}
         </div>
       </div>
     </div>
@@ -111,11 +164,19 @@
 
 <script>
   class Entrada {
-    constructor(code, name, price, quantity) {
-      this.CODIGO = code;
+    constructor(code, name, estado, price, quantity, entrada) {
+      this.PRODUCTO = code;
       this.NOMBRE = name;
       this.PRECIO = price;
       this.CANTIDAD = quantity;
+      this.ENTRADA = entrada;
+      this.ESTADO = estado;
+    }
+  }
+  class Movimiento{
+    constructor(fecha,usuario){
+      this.DATE = fecha;
+      this.USER = usuario;
     }
   }
 
@@ -126,7 +187,13 @@
         Entries: [],
         Entrada: new Entrada(),
         date: '',
-        nav:false
+        code: '',
+        setMovment: false,
+        nav: false,
+        search: '',
+        Error: 'Error Div',
+        stockEntry: 0,
+        Mov: new Movimiento()
       }
     },
     created(){
@@ -147,14 +214,28 @@
           this.nav=false;
         }
       },
-      getEntries() {
+      getProdToEntries() {
         fetch(`/api/inventory/entries`)
         .then(res => res.json())
         .then(data => {
-          this.Entries = data;
+          this.products = data;
+          console.log(data);
+        })
+      },
+      getEntries() {
+        fetch(`api/inventory/`+this.code)
+        .then(res => res.json())
+        .then(data => {
+          if (data.hasError) {
+            console.log(data.ErrorMsg);
+          } else {
+            this.Entries = data.rows;
+            console.log(data);
+          }
         })
       },
       showAdd(ok){
+        //Muestra/Oculta el panel para agregar una entrada
         if (ok) {
           document.getElementById('AddEntry').style.display="flex";
         }else{
@@ -163,15 +244,95 @@
         }
       },
       reset(){
+        //Resetea los valores de la variable Entrada
         this.Entrada = new Entrada();
+        document.getElementById('ErrAdd').style.visibility = 'hidden';
+        this.stockEntry = 0;
       },
       showDiv(id){
-        divS = document.getElementById(id);
+        //Muestra/Oculta un elemento html con el Id
+        //indicado
+        let divS = document.getElementById(id);
         if (divS.style.display=="block") {
           divS.style.display="none";
         } else {
           divS.style.display="block";
+          if (id=='searchP') {
+            this.getProdToEntries();
+          }
         }
+      },
+      findProducts(){
+        //Busca los productos que coincidan con la
+        //descripcion escrita en el cuadro de busqueda
+        if (this.search=='') {
+          this.getProdToEntries();
+        } else {
+            fetch('/api/products/findName/'+this.search+'/0')
+            .then(res => res.json())
+            .then(data => {
+              this.products = data[0];
+            })
+        }
+      },
+      getProduct(id){
+        //Retorna un producto con el Id indicado
+        fetch('/api/products/findId/' + id)
+        .then(res => res.json())
+        .then(data => {
+          console.log(data[0][0]);
+          this.Entrada = new Entrada(data[0][0].ID_PROD,  data[0][0].NOMBRE,'','','');
+          this.stockEntry = data[0][0].STOCK;
+          this.unidad = data[0][0].UNIDAD;
+        })
+        document.getElementById('searchP').style.display = "none";
+      },
+      addEntry(){
+        //Función para agregar una entrada a la base
+        //de datos
+        if (setMov) {
+          this.Entrada.ENTRADA = this.code.trim();
+        }
+        fetch('api/inventory/entries',{
+          method: 'POST',
+          body: JSON.stringify(this.Entrada),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if(data.hasError){
+            this.Error = data.ErrorMsg;
+            document.getElementById('ErrAdd').style.visibility = 'visible';
+          }else{
+            document.getElementById('ErrAdd').style.visibility = 'hidden';
+            this.Error = "Error Div";
+            this.showAdd(false);
+            this.reset();
+            this.getEntries();
+          }
+        })
+      },
+      setMov() {
+        this.code = this.code.trim();
+        this.setMovment = true;
+        this.setFecha();
+        document.getElementById('MovCode').readonly = true;
+        fetch(`api/inventory/`+this.code,{
+          method: 'POST',
+          body: JSON.stringify(this.Mov),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+      },
+      setFecha(){
+        let fecha = this.date.getFullYear()+'-'+(this.date.getMonth()+1)+'-'+this.date.getDate();
+        this.Mov = new Movimiento(fecha, 1);
+        console.log(this.Mov);
       }
     }
   }

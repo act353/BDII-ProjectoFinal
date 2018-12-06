@@ -3,14 +3,14 @@
     <div id="navmen" class="navmen">
       <button  class="closebtn" v-on:click="showNav(false)">&times;</button>
       <div class="linkmen">
-        <router-link to="/Productos"><span><img src="/img/icono-inicio.png" alt="Inicio"></span><span><button>Productos</button></span></router-link>
+        <router-link to="/Productos"><span><img src="/img/icono-productos.png" alt="Inicio"></span><span><button>Productos</button></span></router-link>
       </div>
       <div class="linkmen">
         <router-link to="/Entries"><span><img src="/img/icono-inventario.png" alt="Inicio"></span><span><button>Inventario</button></span></router-link>
       </div>
-      <div class="linkmen">
+      <!--div class="linkmen">
         <router-link to="/Sesion"><span><img src="/img/icono-mantenimiento.png" alt="Inicio"></span><span><button> Mantenimiento</button></span></router-link>
-      </div>
+      </div-->
       <div class="linkmen">
         <router-link to="/Sesion"><span><img src="/img/icono-inicio.png" alt="Inicio"></span><span><button>Cerrar sesión</button></span></router-link>
       </div>
@@ -103,7 +103,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <table class="scroll" style="margin: 0 15px">
+        <table class="scroll" style="margin: 0">
           <tr>
             <td style="padding:0;">
               <table class="ProductL">
