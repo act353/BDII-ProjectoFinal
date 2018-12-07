@@ -147,6 +147,20 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-12">
+            <div class="select">
+              <div class="selectbtn-content" v-on:click="drop('ES')">
+                <button class="selectbtn">{{Entrada.ESTADO}}</button>
+                <img src="/img/DropDown30px.png">
+              </div>
+              <div id="ES" class="select-content" style="min-width: 316px;">
+                <button v-on:click="setEstado('Entrada','ES')">Entrada</button>
+                <button v-on:click="setEstado('Salida','ES')">Salida</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-6">
             <button class="btnNormal" v-on:click="showAdd(false)">Cancelar</button>
           </div>
@@ -290,7 +304,7 @@
       addEntry(){
         //Función para agregar una entrada a la base
         //de datos
-        if (setMov) {
+        if (setMovment) {
           this.Entrada.ENTRADA = this.code.trim();
         }
         fetch('api/inventory/entries',{
@@ -317,9 +331,7 @@
       },
       setMov() {
         this.code = this.code.trim();
-        this.setMovment = true;
         this.setFecha();
-        document.getElementById('MovCode').readonly = true;
         fetch(`api/inventory/`+this.code,{
           method: 'POST',
           body: JSON.stringify(this.Mov),
@@ -328,11 +340,35 @@
             'Content-Type': 'application/json'
           }
         })
+        .then(res => res.json())
+        .then(data => {
+          if (data.hasError) {
+            this.Error = data.ErrorMsg;
+            document.getElementById('ErrMov').visibility = 'visible';
+          } else {
+            this.setMovment = true;
+            document.getElementById('MovCode').readonly = true;
+            document.getElementById('ErrMov').visibility = 'hidden';
+          }
+        })
       },
       setFecha(){
         let fecha = this.date.getFullYear()+'-'+(this.date.getMonth()+1)+'-'+this.date.getDate();
         this.Mov = new Movimiento(fecha, 1);
         console.log(this.Mov);
+      },
+      drop(id){
+        let divS = document.getElementById(id);
+        if (divS.style.display == 'block') {
+          divS.style.display = 'none';
+        } else {
+          divS.style.display = 'block';
+        }
+
+      },
+      setEstado(cont, id){
+        this.Entrada.ESTADO = cont;
+        document.getElementById(id).style.display = 'none';
       }
     }
   }

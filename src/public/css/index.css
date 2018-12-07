@@ -39,8 +39,6 @@ body {
   font-family: sans-serif;
   overflow: hidden;
   -webkit-user-select: none;
-
-  transition: 0.5s;
 }
 a {
   text-decoration: none;

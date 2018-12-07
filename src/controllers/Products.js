@@ -53,13 +53,17 @@ module.exports = {
 
   insertProduct: async (req,res) => {
     const {NOMBRE,PRECIO,STOCK,UNIDAD,MOSTRAR} = req.body;
-    const query = `CALL insert_Product(?,?,?,?,?)`;
+    const query = `
+    CALL insert_Product(?,?,?,?,?)`;
     await con.query(query, [NOMBRE,PRECIO,STOCK,UNIDAD,MOSTRAR], (err, fields) => {
       if (!err) {
         res.json({isError:false});
       } else {
         res.json({isError:true, error:err.sqlMessage});
+        console.log(err);
       }
     });
   }
 };
+
+con.end();

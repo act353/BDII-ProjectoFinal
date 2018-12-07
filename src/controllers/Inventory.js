@@ -40,12 +40,31 @@ module.exports = {
     const {Mov} = req.params;
     const {DATE,USER} = req.body;
     const query = `call Insert_Mov(?,?,?)`;
+    con.query('set autocommit=0;',(err, fields) => {
+      if (err) {
+        console.log(err);
+      }
+    });
     await con.query(query,[Mov,DATE,USER], (err, rows, fields) => {
       if (!err) {
         res.json({hasError:false});
       } else {
         res.json({hasError:true, ErrorMsg:err.sqlMessage});
+        con.query('rollback;',(err,fields) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       }
     })
+  },
+
+  saveMov: async (req,res) => {
+    con.query('commit;',(err, fields) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+    con.end();
   }
 };
