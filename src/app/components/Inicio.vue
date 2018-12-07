@@ -24,7 +24,7 @@
           <input id="MovCode" style="width: 70px;height: 25px;" class="input" type="text" v-model="code" v-on:keyup.enter="setMov()" maxlength="10">
           <span>{{date.getDate()}}/{{date.getMonth()+1}}/{{date.getFullYear()}}</span>
         </span>
-        <span style="margin-left:7vw;">
+        <span style="margin-left:7vw;" v-if="this.setMovment">
           <button style="padding:3px 10px;" class="btnNormal" v-on:click="showAdd(true)">Agregar</button>
         </span>
         <span id="ErrMov" class="error" style="margin-left:7vw;">
@@ -77,16 +77,26 @@
       <div class="col-1">
       </div>
     </div>
+    <div class="row" v-if="this.setMovment">
+      <div class="col-1">
+      </div>
+      <div class="col-8">
+        <button class="btnNormal" v-on:click="cancelMov">Cancelar</button>
+      </div>
+      <div class="col-3">
+        <button class="btnNormal">Guardar</button>
+      </div>
+    </div>
     <div id="searchP" class="DisplayC" style="z-index:3;">
       <div class="Product" style="display:block;width:450px;">
         <div class="row">
           <div class="col-12">
-            <input type="text" class="input" v-model="search" v-on:keyup="findProducts" placeholder="Ingresar nombre del producto a buscar">
+            <input type="text" class="input" v-model="search" v-on:keyup="findProducts" placeholder="Ingresar nombre del producto a buscar" style="width:100%;">
           </div>
         </div>
         <div class="row">
           <div class="col-12">
-            <table class="scroll" style="margin: 0;">
+            <table class="scroll" style="margin: 0;height:60%;">
               <tr>
                 <td style="padding:0;">
                   <table class="ProductL">
@@ -103,7 +113,7 @@
               </tr>
               <tr>
                 <td style="padding:0;">
-                  <div style="height:65vh;width:100%;overflow-y:auto;overflow-x:hidden;">
+                  <div style="height:300px;width:100%;overflow-y:auto;overflow-x:hidden;">
                     <table class="ProductL">
                       <tbody>
                         <tr v-for="product of products">
@@ -119,6 +129,9 @@
               </tr>
             </table>
           </div>
+        </div>
+        <div class="row">
+          <button class="btnNormal" v-on:click="showDiv('searchP')">Cancelar</button>
         </div>
       </div>
     </div>
@@ -237,6 +250,7 @@
         })
       },
       getEntries() {
+        this.code = this.code.trim();
         fetch(`api/inventory/`+this.code)
         .then(res => res.json())
         .then(data => {
@@ -262,6 +276,21 @@
         this.Entrada = new Entrada();
         document.getElementById('ErrAdd').style.visibility = 'hidden';
         this.stockEntry = 0;
+      },
+      resetAll(){
+        this.products = [];
+        this.Entries = [];
+        this.reset();
+        this.date = new Date();
+        this.code = '';
+        this.setMovment = false;
+        this.nav = false;
+        this.search = '';
+        this.Error = 'Error Div';
+        this.stockEntry = 0;
+        this.Mov = new Movimiento();
+        document.getElementById('MovCode').readOnly = false;
+        document.getElementById('ErrMov').visibility = 'hidden';
       },
       showDiv(id){
         //Muestra/Oculta un elemento html con el Id
@@ -299,12 +328,12 @@
           this.stockEntry = data[0][0].STOCK;
           this.unidad = data[0][0].UNIDAD;
         })
-        document.getElementById('searchP').style.display = "none";
+        this.showDiv('searchP');
       },
       addEntry(){
         //Función para agregar una entrada a la base
         //de datos
-        if (setMovment) {
+        if (this.setMovment) {
           this.Entrada.ENTRADA = this.code.trim();
         }
         fetch('api/inventory/entries',{
@@ -347,7 +376,8 @@
             document.getElementById('ErrMov').visibility = 'visible';
           } else {
             this.setMovment = true;
-            document.getElementById('MovCode').readonly = true;
+            this.Error = "Error Div";
+            document.getElementById('MovCode').readOnly = true;
             document.getElementById('ErrMov').visibility = 'hidden';
           }
         })
@@ -369,6 +399,60 @@
       setEstado(cont, id){
         this.Entrada.ESTADO = cont;
         document.getElementById(id).style.display = 'none';
+      },
+      cancelMov(){
+        if(confirm('¿Desea cancelar la operación? No se guardaran los datos ingresados')){
+          fetch('/api/inventory/save', {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.hasError) {
+              this.Error = data.err.sqlMessage;
+              console.log(data.err);
+            } else {
+              this.resetAll();
+            }
+         })
+        }
+      },
+      saveMov(){
+        fetch('/api/inventory/save')
+        .then(res => res.json())
+        .then(data => {
+          if (data.hasError) {
+            this.Error = data.err.sqlMessage;
+            console.log(data.err);
+          } else {
+            alert('Movimiento guardado exitósamente.');
+            this.resetAll();
+          }
+        })
+      },
+      deleteEntry(id){
+        if(confirm('¿Desea quitar este elemento de la lista?')){
+          this.code = this.code.trim();
+          fetch('/api/inventory/'+this.code+'/'+id, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.hasError) {
+              this.Error = data.err.sqlMessage;
+              console.log(data.err);
+            } else {
+              this.getEntries();
+            }
+         })
+        }
       }
     }
   }

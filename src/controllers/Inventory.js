@@ -15,7 +15,7 @@ module.exports = {
   insertEntry: async (req,res) => {
     const {PRODUCTO,PRECIO,CANTIDAD,ENTRADA,ESTADO} = req.body;
     const query = `call Insert_Entry(?,?,?,?,?)`;
-    await con.query(query,[ENTRADA,PRODUCTO,PRECIO,CANTIDAD,ESTADO.trim()], (err, rows, fields) => {
+    await con.query(query,[ENTRADA,PRODUCTO,PRECIO,CANTIDAD,ESTADO], (err, rows, fields) => {
       if (!err) {
         res.json({hasError:false});
       } else {
@@ -32,8 +32,22 @@ module.exports = {
         res.json({hasError:false, rows:rows});
       } else {
         res.json({hasError:true, ErrorMsg:err.sqlMessage});
+        console.log(err);
       }
     })
+  },
+
+  deleteEntry: async (req,res) => {
+    const {Mov, id} = req.params;
+    const query = `call delete_Entry(?,?)`;
+    await con.query(query,[Mov,id], (err,fields) => {
+      if (!err) {
+        res.json({hasError:false});
+      } else {
+        res.json({hasError:true, ErrorMsg:err});
+        console.log(err);
+      }
+    });
   },
 
   insertMov: async (req,res) => {
@@ -60,11 +74,24 @@ module.exports = {
   },
 
   saveMov: async (req,res) => {
-    con.query('commit;',(err, fields) => {
-      if (err) {
+    await con.query('commit;',(err, fields) => {
+      if (!err) {
+        res.json({hasError:false});
+      } else {
+        res.json({hasError:true, ErrorMsg:err.sqlMessage});
         console.log(err);
       }
     });
-    con.end();
+  },
+
+  cancelMov: async (req,res) => {
+    await con.query('rollback;',(err, fields) => {
+      if (!err) {
+        res.json({hasError:false});
+      } else {
+        res.json({hasError:true, ErrorMsg:err});
+        console.log(err);
+      }
+    });
   }
 };

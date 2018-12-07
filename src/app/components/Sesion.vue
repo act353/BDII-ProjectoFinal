@@ -61,10 +61,10 @@ export default {
       .then(res => res.json())
       .then(data => {
         console.log(data);
-        if (data.status) {
+        if (!data.hasError) {
           this.$router.push('/Entries');
         }else{
-          this.msg = data.err;
+          this.msg = data.err.sqlMessage;
           this.Error.err = true;
           this.Error.hiden = false;
           document.getElementById("user").focus();

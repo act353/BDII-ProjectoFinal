@@ -5,7 +5,10 @@ const {
   getProdToEntries,
   insertEntry,
   getEntries,
-  insertMov
+  insertMov,
+  saveMov,
+  cancelMov,
+  deleteEntry
 } = require('../controllers/Inventory.js');
 
 router.route('/entries')
@@ -13,8 +16,17 @@ router.route('/entries')
   .post(insertEntry)
 ;
 
+router.route('/:Mov/:id')
+  .delete(deleteEntry)
+;
+
 router.route('/:Mov')
   .get(getEntries)
   .post(insertMov)
+;
+
+router.route('/save')
+  .get(saveMov)
+  .delete(cancelMov)
 ;
 module.exports = router;
