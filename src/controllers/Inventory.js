@@ -26,7 +26,7 @@ module.exports = {
 
   getEntries: async (req,res) => {
     const {Mov} = req.params;
-    const query = `SELECT * FROM getEntries WHERE PRODUCTOSI.INVENTARIO = ?`;
+    const query = `SELECT * FROM getEntries WHERE INVENTARIO = ?`;
     await con.query(query,[Mov],(err,rows,fields) => {
       if (!err) {
         res.json({hasError:false, rows:rows});

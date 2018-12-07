@@ -61,7 +61,7 @@
                       <td>{{product.PRODUCTO}}</td>
                       <td>{{product.NOMBRE}}</td>
                       <td>{{product.UNIDAD}}</td>
-                      <td>{{product.CANTIDAD}}</td>
+                      <td>{{product.CANT}}</td>
                       <td>{{product.PRECIO}}</td>
                       <td>
                         <button type="button" class="btnNormal" v-on:click="deleteEntry(product.PRODUCTO)">Quitar</button>
@@ -84,7 +84,7 @@
         <button class="btnNormal" v-on:click="cancelMov">Cancelar</button>
       </div>
       <div class="col-3">
-        <button class="btnNormal">Guardar</button>
+        <button class="btnNormal" v-on:click="saveMov">Guardar</button>
       </div>
     </div>
     <div id="searchP" class="DisplayC" style="z-index:3;">
